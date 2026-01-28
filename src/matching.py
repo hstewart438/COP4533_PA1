@@ -60,8 +60,66 @@ def read_input(file):
     return n, hospital_prefs, student_prefs
 
 
+def galeShapley(n, hospitalPrefs, studentPrefs):
+    #Gale Shapley algorithm to find a stable matching between hospitals and students
+    # Input: n, hospitalPrefs, studentPrefs
+    # Output: matching, numProposals
+   
+    # Build student ranking dict for O(1) lookups
+    studentRank = []
+    for s in range(n):
+        rank = {}
+        for i, h in enumerate(studentPrefs[s]):
+            rank[h] = i
+        studentRank.append(rank)
+    
+    hospitalMatch = [None] * n
+    studentMatch = [None] * n
+    nextProposal = [0] * n
+    freeHospitals = list(range(n))
+    numProposals = 0
+    
+    while freeHospitals:
+        h = freeHospitals.pop(0)
+        
+        if nextProposal[h] >= n:
+            continue
+        
+        # Hospital h proposes to next student
+        s = hospitalPrefs[h][nextProposal[h]] - 1
+        nextProposal[h] += 1
+        numProposals += 1
+        
+        if studentMatch[s] is None:
+            # Student accepts
+            hospitalMatch[h] = s
+            studentMatch[s] = h
+        else:
+            hPrime = studentMatch[s]
+            # Student compares current vs new proposal
+            if studentRank[s][h + 1] < studentRank[s][hPrime + 1]:
+                # Student prefers h, reject hPrime
+                hospitalMatch[h] = s
+                studentMatch[s] = h
+                hospitalMatch[hPrime] = None
+                if nextProposal[hPrime] < n:
+                    freeHospitals.append(hPrime)
+            else:
+                # Student rejects h
+                if nextProposal[h] < n:
+                    freeHospitals.append(h)
+    
+    # Convert to 1-indexed output
+    matching = {}
+    for h in range(n):
+        if hospitalMatch[h] is not None:
+            matching[h + 1] = hospitalMatch[h] + 1
+    
+    return matching, numProposals
+
+
 def main():
-    if len(sys.argv) < 1:
+    if len(sys.argv) < 2:
         print("Include an input file to run program.")
         sys.exit(1)
 
@@ -73,18 +131,21 @@ def main():
         print(e)
         sys.exit(1)
 
-    #debug checking read_input
-    print(n)
-    print(hospital_prefs)
-    print(student_prefs)
-
     start = time.perf_counter()
 
-    # Run matching algo here
+    # Run Gale-Shapley algorithm
+    matching, numProposals = galeShapley(n, hospital_prefs, student_prefs)
 
     end = time.perf_counter()
-    print(f"Matching runtime: ", end - start, " seconds")
+
+    # Output the final matching
+    for hospital in sorted(matching.keys()):
+        print(f"{hospital} {matching[hospital]}")
     
+    # Optionally output number of proposals and runtime (to stderr)
+    sys.stderr.write(f"Number of proposals: {numProposals}\n")
+    sys.stderr.write(f"Matching runtime: {end - start:.6f} seconds\n")
+
 
 if __name__ == "__main__":
     main()

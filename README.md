@@ -46,6 +46,10 @@ python src/main.py both tests/large_tests
 
 ## Input Format
 
+**Input file type:** Input files must use the **`.in`** extension. The program only processes files ending in `.in` (e.g., `verify.in`, `1.in`, `128.in`). Other file extensions are not accepted.
+
+**Structure:**
+
 ```
 n
 <n lines of hospital preferences>

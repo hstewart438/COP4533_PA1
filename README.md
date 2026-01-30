@@ -4,8 +4,11 @@ Implementation of the Gale-Shapley algorithm for the hospital-student stable mat
 
 ## Usage
 
-```bash
-python src/matching.py <input_file>
+```
+bash
+    python src/main.py match tests/<folder>
+    python src/main.py verify tests/<folder>
+    python src/main.py both tests/<folder>
 ```
 
 ## Input Format

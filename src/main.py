@@ -91,15 +91,19 @@ def run_match(folder_or_file):
 
 
 def run_verify(folder):
-    # Must contain verify.in and verify.out
+    # Prefer verify.in/verify.out; else use <folder_name>.in / <folder_name>.out
     input_path = os.path.join(folder, "verify.in")
     output_path = os.path.join(folder, "verify.out")
+    if not os.path.exists(input_path) or not os.path.exists(output_path):
+        base = os.path.basename(os.path.normpath(folder))
+        input_path = os.path.join(folder, f"{base}.in")
+        output_path = os.path.join(folder, f"{base}.out")
 
     if not os.path.exists(input_path):
-        print("VERIFY MODE ERROR: verify.in not found in folder.")
+        print("VERIFY MODE ERROR: verify.in (or <folder>.in) not found in folder.")
         sys.exit(1)
     if not os.path.exists(output_path):
-        print("VERIFY MODE ERROR: verify.out not found in folder.")
+        print("VERIFY MODE ERROR: verify.out (or <folder>.out) not found in folder.")
         sys.exit(1)
 
     # Load files
@@ -120,7 +124,10 @@ def run_verify(folder):
         matching[h] = hospital_to_student[h]
 
     # Run verification
+    start = time.perf_counter()
     verify_matching(n, hospital_prefs, student_prefs, matching)
+    end = time.perf_counter()
+    sys.stderr.write(f"\nVerification runtime: {end - start:.6f} seconds\n")
 
 def run_both_single(folder, infile, input_path):
     """Run match + verify for one .in file."""

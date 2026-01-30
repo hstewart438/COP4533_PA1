@@ -69,22 +69,10 @@ def read_output(file):
     # check if empty
     if not lines:
         raise ValueError("INVALID output file: File is empty.")
-
-    # check if n is an integer
-    try:
-        n = int(lines[0])
-        if n <= 0:
-            raise ValueError("INVALID output file: Cannot calculate for n<=0.")
-    except ValueError:
-        raise ValueError("INVALID ouput file: First line should be an integer.")
-
-    # remove n
-    lines.pop(0)  
     
-    # check valid total lines
-    if len(lines) != n: 
-        raise ValueError("INVALID output file: Expected exactly n matching pairs.")
-
+    # get n
+    n = len(lines)
+    print(f"{n}")
     # Read matching pairs
     hospital_to_student = [None] * (n+1)
     student_to_hospital = [None] * (n+1)
@@ -92,7 +80,7 @@ def read_output(file):
     for line in lines:
         pair = line.split()
         if len(pair) != 2:
-            raise ValueError("INVALID: output file does not contain n matching pairs.")
+            raise ValueError("INVALID: output file contains line with no match pair.")
 
         try:
             hospital = int(pair[0])

@@ -96,7 +96,6 @@ def verify_matching(n, hospital_prefs, student_prefs, matching):
                 if pref == hospital:
                     print(f"\nUNSTABLE: Hospital {hospital} and Student {s_prime} are a blocking pair\n")
                     blocking = True
-                    sys.exit(1)
     if blocking:
         print("")
         sys.exit(1)

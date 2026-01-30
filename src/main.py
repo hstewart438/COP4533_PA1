@@ -35,7 +35,6 @@ def find_all_input_files(folder):
 def write_output_file(output_path, n, matching):
     # Write output to file
     with open(output_path, "w") as f:
-        f.write(f"{n}\n")
         for hospital, student in sorted(matching.items()):
             if hospital == n:
                 f.write(f"{hospital} {student}")
@@ -115,7 +114,7 @@ def run_verify(folder):
         sys.exit(1)
 
     if n != n2:
-        print("INVALID: Mismatch in number of participants between input and output files.")
+        print("INVALID: Mismatch in n between input and output files.")
         sys.exit(1)
 
     # Convert arrays to matching dict

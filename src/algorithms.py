@@ -94,12 +94,12 @@ def verify_matching(n, hospital_prefs, student_prefs, matching):
                     break  # student prefers current match
 
                 if pref == hospital:
-                    print(f"\nUNSTABLE: Hospital {hospital} and Student {s_prime} are a blocking pair\n")
+                    print(f"\nUNSTABLE: Hospital {hospital} and Student {s_prime} are a blocking pair")
                     blocking = True
     if blocking:
-        print("")
+        print("\nUnstable pairs found, ending verification.\n")
         sys.exit(1)
     else:
-        print("VALID STABLE")
+        print("\nVALID STABLE")
 
 

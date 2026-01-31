@@ -82,11 +82,9 @@ def run_match(folder_or_file):
     output_path = os.path.join(folder, outfile)
     write_output_file(output_path, n, matching)
 
-    print(f"\nWriting output to {output_path}")
-
     # Output number of proposals and runtime (to stderr)
     sys.stderr.write(f"\nNumber of proposals: {numProposals}")
-    sys.stderr.write(f"\nMatching runtime: {end - start:.6f} seconds")
+    sys.stderr.write(f"\nMatching runtime: {end - start:.6f} seconds\n")
 
 
 def run_verify(folder):
@@ -172,10 +170,10 @@ def run_both(folder):
 def main():
     if len(sys.argv) != 3:
         print("Command Usage:")
-        print("  python main.py match <folder>")
-        print("  python main.py match <path/to/file.in>")
-        print("  python main.py verify <folder>")
-        print("  python main.py both <folder>")
+        print("  python src/main.py match <folder>")
+        print("  python src/main.py match <folder>")
+        print("  python src/main.py verify <path/folder>")
+        print("  python src/main.py both <folder>")
         sys.exit(1)
 
     mode = sys.argv[1]
@@ -185,17 +183,26 @@ def main():
         if not os.path.isdir(path_arg) and not os.path.isfile(path_arg):
             print(f"ERROR: Path '{path_arg}' does not exist.")
             sys.exit(1)
+        print("\n" + "=" * 60)
+        print("\nRunning in MATCH mode.")
         run_match(path_arg)
+        print("\nMATCH mode completed.\n")
     elif mode == "verify":
         if not os.path.isdir(path_arg):
             print(f"ERROR: Folder '{path_arg}' does not exist.")
             sys.exit(1)
+        print("\n" + "=" * 60)
+        print("\nRunning in VERIFY mode.")
         run_verify(path_arg)
+        print("\nVERIFY mode completed.\n")
     elif mode == "both":
         if not os.path.isdir(path_arg):
             print(f"ERROR: Folder '{path_arg}' does not exist.")
             sys.exit(1)
+        print("\n" + "=" * 60)
+        print("\nRunning in BOTH mode.")
         run_both(path_arg)
+        print("\nBOTH mode completed.\n")
     else:
         print("ERROR: Mode must be 'match', 'verify', or 'both'.")
         sys.exit(1)
